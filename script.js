@@ -31,10 +31,54 @@ const customMessageAreaEl = document.getElementById('message-area');
 const gameContainer = document.getElementById('game-container');
 const completionScreen = document.getElementById('completion-screen');
 const restartBtn = document.getElementById('restart-btn');
+const langSelect = document.getElementById('lang-select');
+
+// Localization Dictionary
+const i18n = {
+    ja: {
+        title: "Make 10 Challenge",
+        problemLabel: "問題",
+        resetBtn: "最初から",
+        backspaceBtn: "⌫ 1文字消す",
+        clearBtn: "クリア",
+        completionMsg: "全問クリア！おめでとうございます！",
+        restartBtn: "初めからやる",
+        successMsg: "OK! 正解！",
+        confirmReset: "本当に最初からやり直しますか？"
+    },
+    en: {
+        title: "Make 10 Challenge",
+        problemLabel: "Problem",
+        resetBtn: "Reset",
+        backspaceBtn: "⌫ Backspace",
+        clearBtn: "Clear",
+        completionMsg: "All problems cleared! Congratulations!",
+        restartBtn: "Play Again",
+        successMsg: "OK! Correct!",
+        confirmReset: "Are you sure you want to restart from the beginning?"
+    }
+};
+
+let currentLang = 'ja';
 
 // Initialize
 function init() {
     const savedIndex = localStorage.getItem('make10_problem_index');
+    // Load language preference
+    const savedLang = localStorage.getItem('make10_lang');
+    if (savedLang && i18n[savedLang]) {
+        currentLang = savedLang;
+        langSelect.value = currentLang;
+    } else {
+        // Try to detect
+        const browserLang = navigator.language.slice(0, 2);
+        if (i18n[browserLang]) {
+            currentLang = browserLang;
+            langSelect.value = currentLang;
+        }
+    }
+    updateLanguage();
+
     if (savedIndex !== null) {
         currentProblemIndex = parseInt(savedIndex, 10);
         // Validate index range
@@ -56,8 +100,25 @@ function init() {
     document.getElementById('backspace-btn').addEventListener('click', backspace);
     document.getElementById('clear-btn').addEventListener('click', clearExpression);
     restartBtn.addEventListener('click', restartGame);
+    // Language Toggle
+    langSelect.addEventListener('change', (e) => {
+        currentLang = e.target.value;
+        localStorage.setItem('make10_lang', currentLang);
+        updateLanguage();
+    });
 
     render();
+}
+
+function updateLanguage() {
+    const texts = i18n[currentLang];
+    document.title = texts.title;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (texts[key]) {
+            el.textContent = texts[key];
+        }
+    });
 }
 
 function render() {
@@ -175,7 +236,7 @@ function checkSolution(allNumbersUsed) {
         
         // Exact 10 check, handle floating point epsilon if division is used
         if (Math.abs(result - 10) < 0.000001) {
-            customMessageAreaEl.innerHTML = '<div class="success-message">OK! Correct!</div>';
+            customMessageAreaEl.innerHTML = `<div class="success-message">${i18n[currentLang].successMsg}</div>`;
             // Disable inputs?
             
             setTimeout(() => {

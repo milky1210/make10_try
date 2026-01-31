@@ -8,9 +8,15 @@
 </head>
 <body>
     <div id="app">
-        <h1>Make 10 Challenge</h1>
+        <div style="text-align: right; margin-bottom: 10px;">
+            <select id="lang-select">
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <h1 data-i18n="title">Make 10 Challenge</h1>
         <div id="status-bar">
-            <span>問題: <span id="current-problem-num">1</span> / <span id="total-problems">126</span></span>
+            <span><span data-i18n="problemLabel">問題</span>: <span id="current-problem-num">1</span> / <span id="total-problems">126</span></span>
         </div>
 
         <div id="game-container">
@@ -33,16 +39,16 @@
             </div>
 
             <div id="controls">
-                <button id="backspace-btn">⌫ 1文字消す</button>
-                <button id="clear-btn">クリア</button>
+                <button id="backspace-btn" data-i18n="backspaceBtn">⌫ 1文字消す</button>
+                <button id="clear-btn" data-i18n="clearBtn">クリア</button>
             </div>
             
             <div id="message-area"></div>
         </div>
 
         <div id="completion-screen" style="display: none;">
-            <h2>全問クリア！おめでとうございます！</h2>
-            <button id="restart-btn">初めからやる</button>
+            <h2 data-i18n="completionMsg">全問クリア！おめでとうございます！</h2>
+            <button id="restart-btn" data-i18n="restartBtn">初めからやる</button>
         </div>
     </div>
     <script src="script.js"></script>
