@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make 10 Challenge</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Make 10 Challenge</h1>
+        <div id="status-bar">
+            <span>問題: <span id="current-problem-num">1</span> / <span id="total-problems">126</span></span>
+        </div>
+
+        <div id="game-container">
+            <div id="expression-display">
+                <span id="expression-text"></span>
+                <span id="result-indicator"></span>
+            </div>
+
+            <div id="available-numbers" class="number-container">
+                <!-- Numbers will be injected here -->
+            </div>
+
+            <div id="operators" class="operator-container">
+                <button class="op-btn" data-op="+">+</button>
+                <button class="op-btn" data-op="-">-</button>
+                <button class="op-btn" data-op="*">×</button>
+                <button class="op-btn" data-op="/">÷</button>
+                <button class="op-btn" data-op="(">(</button>
+                <button class="op-btn" data-op=")">)</button>
+            </div>
+
+            <div id="controls">
+                <button id="backspace-btn">⌫ 1文字消す</button>
+                <button id="clear-btn">クリア</button>
+            </div>
+            
+            <div id="message-area"></div>
+        </div>
+
+        <div id="completion-screen" style="display: none;">
+            <h2>全問クリア！おめでとうございます！</h2>
+            <button id="restart-btn">初めからやる</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
