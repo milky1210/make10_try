@@ -16,7 +16,8 @@
         </div>
         <h1 data-i18n="title">Make 10 Challenge</h1>
         <div id="status-bar">
-            <span><span data-i18n="problemLabel">問題</span>: <span id="current-problem-num">1</span> / <span id="total-problems">126</span></span>
+            <span><span data-i18n="problemLabel">問題</span>: <span id="current-problem-num">1</span> / <span id="total-problems"></span></span>
+            <button id="unsolvable-btn" data-i18n="unsolvableBtn">解けない問題一覧</button>
         </div>
 
         <div id="game-container">
@@ -51,6 +52,16 @@
             <button id="restart-btn" data-i18n="restartBtn">初めからやる</button>
         </div>
     </div>
+
+    <!-- Unsolvable combinations modal -->
+    <div id="unsolvable-modal" style="display: none;">
+        <div id="unsolvable-content">
+            <h2 id="unsolvable-title">Make 10 できない組み合わせ</h2>
+            <div id="unsolvable-list"></div>
+            <button id="unsolvable-close-btn" data-i18n="unsolvableClose">閉じる</button>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
