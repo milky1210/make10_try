@@ -1,11 +1,31 @@
-// Generate all combinations of 4 distinct numbers from 1-9
+// Combinations that cannot make 10 (digits in ascending order, stored as 4-char strings).
+// Each entry represents a multiset of 4 digits from 1-9 for which no arithmetic expression
+// using +, -, *, / and parentheses can produce exactly 10.
+// Source: exhaustive search over all operator/bracket permutations.
+const UNSOLVABLE = new Set([
+    "1111","1112","1113","1122","1159","1169","1177","1178","1179","1188",
+    "1399","1444","1499","1666","1667","1677","1699","1777",
+    "2257",
+    "3444","3669","3779","3999",
+    "4444","4459","4477","4558","4899","4999",
+    "5668","5788","5799","5899",
+    "6666","6667","6677","6777","6778","6888","6899","6999",
+    "7777","7788","7789","7799","7888","7999",
+    "8899"
+]);
+
+// Generate all multiset combinations of 4 numbers from 1-9 (9H4 = 495),
+// excluding the ones that cannot make 10.
 function generateProblems() {
     const problems = [];
     for (let i = 1; i <= 9; i++) {
-        for (let j = i + 1; j <= 9; j++) {
-            for (let k = j + 1; k <= 9; k++) {
-                for (let l = k + 1; l <= 9; l++) {
-                    problems.push([i, j, k, l]);
+        for (let j = i; j <= 9; j++) {
+            for (let k = j; k <= 9; k++) {
+                for (let l = k; l <= 9; l++) {
+                    const key = `${i}${j}${k}${l}`;
+                    if (!UNSOLVABLE.has(key)) {
+                        problems.push([i, j, k, l]);
+                    }
                 }
             }
         }
@@ -32,6 +52,9 @@ const gameContainer = document.getElementById('game-container');
 const completionScreen = document.getElementById('completion-screen');
 const restartBtn = document.getElementById('restart-btn');
 const langSelect = document.getElementById('lang-select');
+const unsolvableModal = document.getElementById('unsolvable-modal');
+const unsolvableBtn = document.getElementById('unsolvable-btn');
+const unsolvableCloseBtn = document.getElementById('unsolvable-close-btn');
 
 // Localization Dictionary
 const i18n = {
@@ -44,7 +67,10 @@ const i18n = {
         completionMsg: "全問クリア！おめでとうございます！",
         restartBtn: "初めからやる",
         successMsg: "OK! 正解！",
-        confirmReset: "本当に最初からやり直しますか？"
+        confirmReset: "本当に最初からやり直しますか？",
+        unsolvableBtn: "解けない問題一覧",
+        unsolvableTitle: "Make 10 できない組み合わせ",
+        unsolvableClose: "閉じる"
     },
     en: {
         title: "Make 10 Challenge",
@@ -55,7 +81,10 @@ const i18n = {
         completionMsg: "All problems cleared! Congratulations!",
         restartBtn: "Play Again",
         successMsg: "OK! Correct!",
-        confirmReset: "Are you sure you want to restart from the beginning?"
+        confirmReset: "Are you sure you want to restart from the beginning?",
+        unsolvableBtn: "Unsolvable List",
+        unsolvableTitle: "Combinations that cannot make 10",
+        unsolvableClose: "Close"
     }
 };
 
@@ -100,6 +129,12 @@ function init() {
     document.getElementById('backspace-btn').addEventListener('click', backspace);
     document.getElementById('clear-btn').addEventListener('click', clearExpression);
     restartBtn.addEventListener('click', restartGame);
+    // Unsolvable modal
+    unsolvableBtn.addEventListener('click', showUnsolvable);
+    unsolvableCloseBtn.addEventListener('click', hideUnsolvable);
+    unsolvableModal.addEventListener('click', (e) => {
+        if (e.target === unsolvableModal) hideUnsolvable();
+    });
     // Language Toggle
     langSelect.addEventListener('change', (e) => {
         currentLang = e.target.value;
@@ -265,6 +300,26 @@ function restartGame() {
     expressionParts = [];
     customMessageAreaEl.innerHTML = '';
     render();
+}
+
+function showUnsolvable() {
+    const texts = i18n[currentLang];
+    document.getElementById('unsolvable-title').textContent = texts.unsolvableTitle;
+    const listEl = document.getElementById('unsolvable-list');
+    listEl.innerHTML = '';
+    UNSOLVABLE.forEach(key => {
+        // key is a 4-char string like "1234"; display as "1, 2, 3, 4"
+        const digits = key.split('').join(', ');
+        const item = document.createElement('span');
+        item.className = 'unsolvable-item';
+        item.textContent = digits;
+        listEl.appendChild(item);
+    });
+    unsolvableModal.style.display = 'flex';
+}
+
+function hideUnsolvable() {
+    unsolvableModal.style.display = 'none';
 }
 
 // Start
