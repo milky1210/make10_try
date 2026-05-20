@@ -215,6 +215,11 @@ function render() {
 
     const lastPart = expressionParts[expressionParts.length - 1];
     const isNumberInputLocked = lastPart && lastPart.type === 'number';
+    const isOperatorInputLocked = lastPart && lastPart.type === 'operator';
+
+    document.querySelectorAll('.op-btn').forEach(btn => {
+        btn.disabled = isOperatorInputLocked;
+    });
 
     currentNumbers.forEach((num, idx) => {
         const btn = document.createElement('button');
