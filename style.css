@@ -54,12 +54,26 @@ h1 {
     color: #888;
 }
 
-.number-container, .operator-container, #controls {
+.number-container, #controls {
     display: flex;
     gap: 10px;
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
+}
+
+.operator-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.operator-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 button {

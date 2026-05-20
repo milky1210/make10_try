@@ -213,11 +213,14 @@ function render() {
         }
     });
 
+    const lastPart = expressionParts[expressionParts.length - 1];
+    const isNumberInputLocked = lastPart && lastPart.type === 'number';
+
     currentNumbers.forEach((num, idx) => {
         const btn = document.createElement('button');
         btn.className = 'number-btn';
         btn.textContent = num;
-        btn.disabled = usedIndices.has(idx);
+        btn.disabled = usedIndices.has(idx) || isNumberInputLocked;
         btn.addEventListener('click', () => addNumber(num, idx));
         availableNumbersEl.appendChild(btn);
     });
