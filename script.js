@@ -215,10 +215,27 @@ function render() {
 
     const lastPart = expressionParts[expressionParts.length - 1];
     const isNumberInputLocked = lastPart && lastPart.type === 'number';
-    const isOperatorInputLocked = lastPart && lastPart.type === 'operator';
+
+    const parenDepth = expressionParts.reduce((d, p) => {
+        if (p.value === '(') return d + 1;
+        if (p.value === ')') return d - 1;
+        return d;
+    }, 0);
+    const lastVal = lastPart ? lastPart.value : null;
+    const isArithOp = v => v === '+' || v === '-' || v === '*' || v === '/';
 
     document.querySelectorAll('.op-btn').forEach(btn => {
-        btn.disabled = isOperatorInputLocked;
+        const op = btn.dataset.op;
+        if (isArithOp(op)) {
+            // Disable if expression empty, last is arith op, or last is '('
+            btn.disabled = !lastPart || isArithOp(lastVal) || lastVal === '(';
+        } else if (op === '(') {
+            // Disable if depth >= 3, or last is a number or ')'
+            btn.disabled = parenDepth >= 3 || (lastPart && (lastPart.type === 'number' || lastVal === ')'));
+        } else if (op === ')') {
+            // Disable if no open paren to close, last is '(' (empty parens), or last is arith op
+            btn.disabled = parenDepth <= 0 || !lastPart || lastVal === '(' || isArithOp(lastVal);
+        }
     });
 
     currentNumbers.forEach((num, idx) => {
